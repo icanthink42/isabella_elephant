@@ -45,6 +45,7 @@ document.addEventListener('mouseup', () => {
 });
 
 document.addEventListener('touchstart', (e) => {
+    e.preventDefault();
     isMouseDown = true;
     targetX = e.touches[0].clientX;
     targetY = e.touches[0].clientY;
@@ -66,6 +67,7 @@ document.addEventListener('touchstart', (e) => {
 });
 
 document.addEventListener('touchmove', (e) => {
+    e.preventDefault();
     if (isMouseDown && targetDot) {
         targetX = e.touches[0].clientX;
         targetY = e.touches[0].clientY;
@@ -74,7 +76,8 @@ document.addEventListener('touchmove', (e) => {
     }
 });
 
-document.addEventListener('touchend', () => {
+document.addEventListener('touchend', (e) => {
+    e.preventDefault();
     isMouseDown = false;
     if (targetDot) {
         targetDot.remove();
@@ -162,31 +165,7 @@ elephants.forEach((elephant, index) => {
             return;
         }
 
-        const radius = 100;
-        const centerX = targetX - 50;
-        const centerY = targetY - 50;
-
-        const circleX = centerX + Math.cos(angle) * radius;
-        const circleY = centerY + Math.sin(angle) * radius;
-
-        const deltaX = circleX - currentX;
-        const deltaY = circleY - currentY;
-        const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
-
-        if (distance < 5) {
-            currentMode = 'circling';
-            circleAroundTarget();
-            return;
-        }
-
-        const duration = distance * 5;
-
-        updateDirection(deltaX);
         elephant.classList.add('walking');
-
-        const startTime = Date.now();
-        const startX = currentX;
-        const startY = currentY;
 
         const animate = () => {
             if (!isMouseDown || targetX === null || targetY === null) {
@@ -197,21 +176,36 @@ elephants.forEach((elephant, index) => {
                 return;
             }
 
-            const elapsed = Date.now() - startTime;
-            const progress = Math.min(elapsed / duration, 1);
+            const radius = 100;
+            const centerX = targetX - 50;
+            const centerY = targetY - 50;
 
-            currentX = startX + deltaX * progress;
-            currentY = startY + deltaY * progress;
+            const circleX = centerX + Math.cos(angle) * radius;
+            const circleY = centerY + Math.sin(angle) * radius;
+
+            const deltaX = circleX - currentX;
+            const deltaY = circleY - currentY;
+            const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+
+            if (distance < 15) {
+                currentMode = 'circling';
+                circleAroundTarget();
+                return;
+            }
+
+            const speed = 2;
+            const moveX = (deltaX / distance) * speed;
+            const moveY = (deltaY / distance) * speed;
+
+            updateDirection(deltaX);
+
+            currentX += moveX;
+            currentY += moveY;
 
             elephant.style.left = `${currentX}px`;
             elephant.style.top = `${currentY}px`;
 
-            if (progress < 1) {
-                animationId = requestAnimationFrame(animate);
-            } else {
-                currentMode = 'circling';
-                circleAroundTarget();
-            }
+            animationId = requestAnimationFrame(animate);
         };
 
         animationId = requestAnimationFrame(animate);
