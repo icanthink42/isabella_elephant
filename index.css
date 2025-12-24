@@ -15,12 +15,22 @@ body {
     -webkit-tap-highlight-color: transparent;
 }
 
+.signature {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 150px;
+    height: auto;
+    z-index: 0;
+}
+
 .elephant {
     position: absolute;
     width: 100px;
     height: 100px;
     object-fit: contain;
     transition: transform 0.1s ease-out;
+    z-index: 1;
 }
 
 @keyframes bob {
