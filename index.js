@@ -88,15 +88,19 @@ document.addEventListener('touchend', (e) => {
 });
 
 elephants.forEach((elephant, index) => {
-    let currentX = Math.random() * (window.innerWidth - 100);
-    let currentY = Math.random() * (window.innerHeight - 100);
+    const size = Math.random() * 80 + 50;
+    elephant.style.width = `${size}px`;
+    elephant.style.height = `${size}px`;
+
+    let currentX = Math.random() * (window.innerWidth - size);
+    let currentY = Math.random() * (window.innerHeight - size);
     let angle = (index / elephants.length) * Math.PI * 2;
     let currentMode = 'random';
     let animationId = null;
 
     const clampPosition = () => {
-        currentX = Math.max(0, Math.min(currentX, window.innerWidth - 100));
-        currentY = Math.max(0, Math.min(currentY, window.innerHeight - 100));
+        currentX = Math.max(0, Math.min(currentX, window.innerWidth - size));
+        currentY = Math.max(0, Math.min(currentY, window.innerHeight - size));
         elephant.style.left = `${currentX}px`;
         elephant.style.top = `${currentY}px`;
     };
@@ -114,8 +118,8 @@ elephants.forEach((elephant, index) => {
     const moveToRandomPosition = () => {
         if (currentMode !== 'random') return;
 
-        const destX = Math.random() * (window.innerWidth - 100);
-        const destY = Math.random() * (window.innerHeight - 100);
+        const destX = Math.random() * (window.innerWidth - size);
+        const destY = Math.random() * (window.innerHeight - size);
 
         const deltaX = destX - currentX;
         const deltaY = destY - currentY;

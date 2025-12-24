@@ -26,8 +26,6 @@ body {
 
 .elephant {
     position: absolute;
-    width: 100px;
-    height: 100px;
     object-fit: contain;
     transition: transform 0.1s ease-out;
     z-index: 1;
